@@ -3,7 +3,7 @@
 // Execute `rustlings hint options3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+// DONE
 
 struct Point {
     x: i32,
@@ -13,9 +13,14 @@ struct Point {
 fn main() {
     let y: Option<Point> = Some(Point { x: 100, y: 200 });
 
-    match y {
+    match &y {
         Some(p) => println!("Co-ordinates are {},{} ", p.x, p.y),
         _ => panic!("no match!"),
     }
-    y; // Fix without deleting this line.
+     // Fix without deleting this line.
+    if let Some( ref p) = y{
+        println!("Point exists with coordinates: ({},{})", p.x, p.y);
+    } else {
+        println!("No point available");
+    }
 }

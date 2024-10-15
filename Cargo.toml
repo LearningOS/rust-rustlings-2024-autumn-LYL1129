@@ -8,6 +8,9 @@ authors = [
 ]
 edition = "2021"
 
+[profile.test]
+rustc-env = { TEST_FOO = "1633046400" }  # 替换为您想要的时间戳
+
 [dependencies]
 argh = "0.1"
 indicatif = "0.16"

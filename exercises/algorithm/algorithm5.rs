@@ -3,7 +3,6 @@
 	This problem requires you to implement a basic BFS algorithm
 */
 
-//I AM NOT DONE
 use std::collections::VecDeque;
 
 // Define a graph
@@ -19,7 +18,7 @@ impl Graph {
         }
     }
 
-    // Add an edge to the graph
+    // Add an edge to the graph 无向图数组
     fn add_edge(&mut self, src: usize, dest: usize) {
         self.adj[src].push(dest); 
         self.adj[dest].push(src); 
@@ -31,7 +30,24 @@ impl Graph {
 		//TODO
 
         let mut visit_order = vec![];
-        visit_order
+        let mut visited = vec![false; self.adj.len()];
+        let mut queue = VecDeque::new(); //Queue for BFS
+        visited[start] = true;
+        queue.push_back(start);
+
+        while let Some(current) = queue.pop_front(){
+            visit_order.push(current); // Add the current node to the visit order
+            
+            // Visit all adjacent nodes
+            for &neighbor in &self.adj[current] {
+                if !visited[neighbor] {
+                    visited[neighbor] = true; // Mark neighbor as visited
+                    queue.push_back(neighbor); // Enqueue the neighbor
+                }
+            }
+        }
+        visit_order // Return the order of visited nodes
+
     }
 }
 

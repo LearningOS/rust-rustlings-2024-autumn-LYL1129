@@ -2,7 +2,6 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -38,6 +37,26 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.count += 1;
+        if self.count < self.items.len() {
+            self.items[self.count] = value;
+        } else {
+            self.items.push(value);
+        }
+        self.bubble_up(self.count);
+
+    }
+    fn bubble_up(&mut self, idx: usize) {
+        let mut index = idx;
+        while index > 1 {
+            let parent_index = self.parent_idx(index);
+            if (self.comparator)(&self.items[index], &self.items[parent_index]) {
+                self.items.swap(index, parent_index);
+                index = parent_index;
+            } else {
+                break;
+            }
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -56,9 +75,38 @@ where
         self.left_child_idx(idx) + 1
     }
 
-    fn smallest_child_idx(&self, idx: usize) -> usize {
+    fn smallest_child_idx(&self, idx: usize) -> Option<usize> {
         //TODO
-		0
+		// 0
+        let left_idx = self.left_child_idx(idx);
+        let right_idx = self.right_child_idx(idx);
+        
+        if left_idx > self.count {
+            return None; // No children
+        }
+        
+        if right_idx > self.count {
+            return Some(left_idx); // Only left child exists
+        }
+
+        // Return the index of the smaller child based on the comparator
+        if (self.comparator)(&self.items[left_idx], &self.items[right_idx]) {
+            Some(left_idx)
+        } else {
+            Some(right_idx)
+        }
+    }
+    fn bubble_down(&mut self, idx: usize) {
+        let mut index = idx;
+        while self.children_present(index) {
+            let smallest_child = self.smallest_child_idx(index).unwrap();
+            if (self.comparator)(&self.items[smallest_child], &self.items[index]) {
+                self.items.swap(index, smallest_child);
+                index = smallest_child;
+            } else {
+                break;
+            }
+        }
     }
 }
 
@@ -85,7 +133,20 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+		// None
+        if self.is_empty() {
+            return None;
+        }
+
+        // Swap the root with the last element
+        self.items.swap(1, self.count);
+        let value = self.items.pop(); // Remove the last element (which is the root)
+        self.count -= 1;
+
+        // Bubble down the new root to maintain heap property
+        self.bubble_down(1);
+
+        value
     }
 }
 
